@@ -11,22 +11,18 @@ import java.util.List;
 import java.util.Objects;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         final File ramlFile = new File("raml-parser-2/models/types.raml");
         RamlModelResult ramlModelResult = new RamlModelBuilder().buildApi(ramlFile);
-        if (ramlModelResult.hasErrors())
-        {
-            for (ValidationResult validationResult : ramlModelResult.getValidationResults())
-            {
+        if (ramlModelResult.hasErrors()) {
+            for (ValidationResult validationResult : ramlModelResult.getValidationResults()) {
                 System.out.println(validationResult.getMessage());
             }
-        }
-        else
-        {
+        } else {
             Api api = ramlModelResult.getApiV10();
             List<TypeDeclaration> types = Objects.requireNonNull(api).types();
-            for ( TypeDeclaration td : types){
-                System.out.println( td.name() );
+            for (TypeDeclaration td : types) {
+                System.out.println(td.name());
             }
         }
     }

@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.raml</groupId>
-        <artifactId>raml-parser-parent</artifactId>
-        <version>1.0.51-SNAPSHOT</version>
+        <groupId>org.zoomba-lang</groupId>
+        <artifactId>raml-utils-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>yagi</artifactId>
     <packaging>jar</packaging>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.11.0</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -35,22 +35,22 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.3</version>
+            <version>2.11.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>23.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jsonSchema</artifactId>
-            <version>2.10.0</version>
+            <version>2.13.4</version>
         </dependency>
 
     </dependencies>

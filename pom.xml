@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.raml</groupId>
-    <artifactId>raml-parser-parent</artifactId>
-    <version>1.0.51-SNAPSHOT</version>
+    <groupId>org.zoomba-lang</groupId>
+    <artifactId>raml-utils-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Raml Java Parser 2nd generation parent</name>
-    <description>Raml parser implemented in java</description>
+    <name>Raml Java Utils 2nd generation parent</name>
+    <description>Raml Utils implemented in java</description>
 
     <modules>
         <module>yagi</module>
@@ -18,6 +18,9 @@
         </developer>
         <developer>
             <id>svacas</id>
+        </developer>
+        <developer>
+            <id>nmondal</id>
         </developer>
     </developers>
 
@@ -32,8 +35,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <snakeyaml.version>1.23</snakeyaml.version>
-        <slf4j.version>1.7.14</slf4j.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <snakeyaml.version>1.32</snakeyaml.version>
+        <slf4j.version>2.0.2</slf4j.version>
     </properties>
 
     <build>
@@ -41,11 +46,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
+                <version>3.10.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -54,7 +55,7 @@
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.8.1</version>
+                        <version>1.13.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -111,20 +112,12 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.5.2</version>
+                <version>3.0.5</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.0-beta-2</version>
-                <configuration>
-                    <reportPlugins>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>findbugs-maven-plugin</artifactId>
-                        </plugin>
-                    </reportPlugins>
-                </configuration>
+                <version>3.12.1</version>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -136,7 +129,14 @@
             </plugins>
         </pluginManagement>
     </build>
-
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
     <profiles>
         <profile>
             <id>sonatype</id>
@@ -169,7 +169,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <version>3.4.1</version>
                         <configuration>
                             <additionalparam>-Xdoclint:none</additionalparam>
                             <source>1.7</source>
@@ -186,7 +186,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>

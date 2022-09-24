@@ -21,9 +21,10 @@ public class NumberCreator extends TypeCreator<Number> {
 
     public final Double min;
     public final Double max;
+    public final Double multipleOf;
     public final Format format;
-    public final long precision;
     public final List<Number> options;
+    public final boolean isIntRange;
 
     public NumberTypeDeclaration typeDeclaration(){
         return (NumberTypeDeclaration) declaration;
@@ -33,6 +34,15 @@ public class NumberCreator extends TypeCreator<Number> {
         return options.size() != 0 ;
     }
 
+    public static boolean isInt(double d){
+        long l = (long)d;
+        return (double)l == d;
+    }
+
+    private boolean computeIntRange(){
+        return ( isInt(min) && isInt(max) && isInt(multipleOf) );
+    }
+
     public NumberCreator(TypeDeclaration declaration) {
         super(declaration);
         NumberTypeDeclaration numberTypeDeclaration = typeDeclaration();
@@ -40,19 +50,9 @@ public class NumberCreator extends TypeCreator<Number> {
         format = Enum.valueOf( Format.class, fmtString);
         min = nullOrElse(numberTypeDeclaration::minimum,0.0d);
         max = nullOrElse(numberTypeDeclaration::maximum,100.0d);
-        int p = Math.min( precision(min), precision(max));
-        precision = (long)Math.pow(10,p);
+        multipleOf = nullOrElse(numberTypeDeclaration::maximum,1.0d);
         options = nullOrElse(numberTypeDeclaration::enumValues, Collections.emptyList());
-    }
-
-    public static int precision(double d){
-        double f = Math.abs(d - (long)d);
-        int cnt = 0;
-        while( f < 0){
-            cnt ++;
-            f = f* 10;
-        }
-        return cnt;
+        isIntRange = computeIntRange();
     }
 
     @Override
@@ -62,10 +62,12 @@ public class NumberCreator extends TypeCreator<Number> {
             int inx = random.nextInt(options.size());
             ret = options.get(inx).doubleValue();
         } else {
-            //TODO inclusive exclusive stuff later
-            long delta = (long)(max - min)*precision;
-            random.nextLong(delta);
-            ret = (min + delta)/precision;
+            //TODO inclusive exclusive multipleOf stuff later
+            if ( isIntRange ){
+                ret = random.nextLong(min.longValue(), max.longValue());
+            } else {
+                ret = random.nextDouble(min, max);
+            }
         }
         return switch (format){
             case INT8 -> (byte) ret;

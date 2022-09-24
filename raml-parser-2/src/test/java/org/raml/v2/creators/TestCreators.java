@@ -69,6 +69,20 @@ public class TestCreators {
         Assert.assertTrue(age.isPresent());
         Assert.assertTrue( age.get().longValue() >= 0);
         Assert.assertTrue( age.get().longValue() <= 1000000000);
+    }
+
+    @Test
+    public void testNumber(){
+        Optional<Number>  fuz = TypeCreator.buildFrom(api, "Fuzziness");
+        Assert.assertTrue(fuz.isPresent());
+
+        Assert.assertTrue( fuz.get().doubleValue() >= 0.0001d);
+        Assert.assertTrue( fuz.get().doubleValue() <= 1.0000d);
+
+        fuz = TypeCreator.buildFrom(api, "FuzzyFloat");
+        Assert.assertTrue(fuz.isPresent());
+        Assert.assertTrue( fuz.get().doubleValue() >= 0.00f);
+        Assert.assertTrue( fuz.get().doubleValue() <= 1.00f);
 
     }
 

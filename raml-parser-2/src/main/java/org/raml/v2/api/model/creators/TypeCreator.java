@@ -4,23 +4,31 @@ import org.raml.v2.api.model.v10.datamodel.*;
 
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.function.Supplier;
 
 public abstract class TypeCreator {
-
-    public static final Random random = new SecureRandom();
-
     protected static final Map<TypeDeclaration,TypeCreator> creators = new HashMap<>();
 
-    public final TypeDeclaration declaration;
+    public static TypeCreatorFactory typeCreatorFactory = TypeCreatorFactory.DEFAULT_INSTANCE;
 
-    public TypeCreator(TypeDeclaration decl){
-        this.declaration = decl;
+    public final Random random = new SecureRandom();
+
+    protected final TypeDeclaration declaration;
+
+    public TypeCreator(TypeDeclaration declaration){
+        this.declaration = declaration;
     }
 
     public boolean shouldBuild(){
         if ( declaration.required()) return true;
         // Use some distribution, eventually...?
         return random.nextBoolean();
+    }
+
+    public static <T> T nullOrElse(Supplier<T> supplier, T defaultValue){
+        T val = supplier.get();
+        if ( val == null ) return defaultValue;
+        return val;
     }
 
     public boolean isComplex(){
@@ -34,25 +42,10 @@ public abstract class TypeCreator {
         return !isComplex();
     }
 
-    protected abstract Optional<Object> create();
+    protected abstract Object create();
 
-    public final Optional<Object> buildPrimitive(){
-        // all primitive types are handled automatically
-        return creators.get(declaration).create();
-    }
 
-    public final Optional<Object> buildComplex(){
+    public static Optional<Object> buildFrom(){
         return Optional.empty();
     }
-
-    public final Optional<Object> build(){
-        if ( !shouldBuild() ) {
-            return Optional.empty();
-        }
-        if ( isPrimitive() ){
-            return buildPrimitive();
-        }
-        return buildComplex();
-    }
-
 }

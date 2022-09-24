@@ -1,7 +1,7 @@
-package org.raml.v2.api.model.creators.impl;
+package org.raml.v2.creators.impl;
 
 import com.mifmif.common.regex.Generex;
-import org.raml.v2.api.model.creators.TypeCreator;
+import org.raml.v2.creators.TypeCreator;
 import org.raml.v2.api.model.v10.datamodel.StringTypeDeclaration;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 

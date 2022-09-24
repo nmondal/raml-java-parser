@@ -7,6 +7,34 @@ types:
     properties:
       onCall: AlertableAdmin
       Head: Manager
+
+  AgeHuman:
+    type : integer
+    minimum: 18
+    maximum: 80
+    format: int8
+
+  AgeBuilding:
+    type : integer
+    minimum: 0
+    maximum: 50000
+    format: int16
+
+  AgeFossil:
+    type : integer
+    minimum: 0
+    maximum: 50000000
+    format: int32
+
+  AgeExistence:
+    type : integer
+    minimum: 0
+    maximum: 150000000000
+    format: int64
+
+  BirthDay:
+    type : date-only
+
   Person:
     type: object
     properties:

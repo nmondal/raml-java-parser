@@ -1,4 +1,4 @@
-package org.raml.v2.api.model.creators;
+package org.raml.v2.creators;
 
 import org.raml.v2.api.model.v10.api.Api;
 import org.raml.v2.api.model.v10.datamodel.*;

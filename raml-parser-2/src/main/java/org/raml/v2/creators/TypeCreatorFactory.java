@@ -34,6 +34,9 @@ public interface TypeCreatorFactory {
             registerClass("number", NumberCreator::new);
             registerClass("integer", NumberCreator::new);
             registerClass("string", StringCreator::new);
+            registerClass("date-only", DateTimeCreator::new);
+            registerClass("time-only", DateTimeCreator::new);
+            registerClass("datetime-only", DateTimeCreator::new);
         }
 
         @Override

@@ -86,4 +86,18 @@ public class TestCreators {
 
     }
 
+    @Test
+    public void testDates(){
+        Optional<String> dt = TypeCreator.buildFrom(api, "BirthDay");
+        Assert.assertTrue(dt.isPresent());
+        Assert.assertEquals( 10, dt.get().length());
+
+        dt = TypeCreator.buildFrom(api, "LunchTime");
+        Assert.assertTrue(dt.isPresent());
+        Assert.assertEquals( 8, dt.get().length());
+
+        dt = TypeCreator.buildFrom(api, "BirthDateTime");
+        Assert.assertTrue(dt.isPresent());
+        Assert.assertEquals( 23, dt.get().length());
+    }
 }

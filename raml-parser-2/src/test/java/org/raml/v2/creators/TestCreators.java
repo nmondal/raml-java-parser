@@ -50,10 +50,25 @@ public class TestCreators {
     }
     @Test
     public void testInteger(){
-        Optional<Byte>  age = TypeCreator.buildFrom(api, "AgeHuman");
+        Optional<Number>  age = TypeCreator.buildFrom(api, "AgeHuman");
         Assert.assertTrue(age.isPresent());
-        Assert.assertTrue( age.get() >= 18);
-        Assert.assertTrue( age.get() <= 80);
+        Assert.assertTrue( age.get().byteValue() >= 18);
+        Assert.assertTrue( age.get().byteValue() <= 80);
+
+        age = TypeCreator.buildFrom(api, "AgeBuilding");
+        Assert.assertTrue(age.isPresent());
+        Assert.assertTrue( age.get().shortValue() >= 0);
+        Assert.assertTrue( age.get().shortValue() <= 20000);
+
+        age = TypeCreator.buildFrom(api, "AgeFossil");
+        Assert.assertTrue(age.isPresent());
+        Assert.assertTrue( age.get().intValue() >= 0);
+        Assert.assertTrue( age.get().intValue() <= 1000000);
+
+        age = TypeCreator.buildFrom(api, "AgeExistence");
+        Assert.assertTrue(age.isPresent());
+        Assert.assertTrue( age.get().longValue() >= 0);
+        Assert.assertTrue( age.get().longValue() <= 1000000000);
 
     }
 

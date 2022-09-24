@@ -57,6 +57,19 @@ types:
   BirthDateTime:
     type: datetime-only
 
+  SampledAges:
+    type: AgeHuman[]
+    minItems: 1
+
+  SampledPhones:
+    type: Phone[]
+    minItems: 4
+
+  SampledBirthDays:
+    type: BirthDay[]
+    minItems: 5
+    maxItems: 5
+
 
   Person:
     type: object

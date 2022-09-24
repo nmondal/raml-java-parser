@@ -20,7 +20,7 @@ public class DateTimeCreator extends TypeCreator<String> {
     }
 
     @Override
-    protected String create() {
+    public String create() {
         long ts = random.nextLong(minDateTimeStamp, maxDateTimeStamp);
         Date dt = new Date(ts);
         if ( declaration instanceof DateTypeDeclaration ){

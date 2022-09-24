@@ -56,7 +56,7 @@ public class NumberCreator extends TypeCreator<Number> {
     }
 
     @Override
-    protected Number create() {
+    public Number create() {
         final double ret;
         if ( isEnum() ){
             int inx = random.nextInt(options.size());

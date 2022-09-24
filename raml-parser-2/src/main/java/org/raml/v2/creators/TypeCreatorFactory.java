@@ -1,5 +1,6 @@
 package org.raml.v2.creators;
 
+import org.raml.v2.api.model.v10.datamodel.ArrayTypeDeclaration;
 import org.raml.v2.creators.impl.*;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 import org.slf4j.Logger;
@@ -39,16 +40,24 @@ public interface TypeCreatorFactory {
             registerClass("datetime-only", DateTimeCreator::new);
         }
 
+        public Function<TypeDeclaration, TypeCreator> constructor( TypeDeclaration typeDeclaration){
+            final String tdName = typeDeclaration.type();
+            Function<TypeDeclaration, TypeCreator> constructor = constructors.get( tdName );
+            if ( constructor != null ) return constructor;
+            if ( typeDeclaration instanceof ArrayTypeDeclaration) return ArrayCreator::new;
+            return null;
+        }
+
         @Override
         public <R> TypeCreator<R> creator(TypeDeclaration typeDeclaration) {
             if ( creators.containsKey(typeDeclaration)) return creators.get(typeDeclaration);
-            Function<TypeDeclaration, TypeCreator> constructor = constructors.get( typeDeclaration.type());
+            Function<TypeDeclaration, TypeCreator> constructor = constructor(typeDeclaration);
             if ( constructor == null ) { // create a null creator
                 logger.error( String.format( "Type Alias [%s] has no associated Type Creator (assigning null creator)!",
                         typeDeclaration.name()));
                 return new TypeCreator(typeDeclaration) {
                     @Override
-                    protected Object create() {
+                    public Object create() {
                         return null;
                     }
                 };

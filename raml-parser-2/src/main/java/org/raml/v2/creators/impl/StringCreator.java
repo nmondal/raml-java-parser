@@ -38,7 +38,7 @@ public class StringCreator extends TypeCreator<String> {
     }
 
     @Override
-    protected String create() {
+    public String create() {
         final String res;
         // if enum, then sample:
         if ( isEnum() ){

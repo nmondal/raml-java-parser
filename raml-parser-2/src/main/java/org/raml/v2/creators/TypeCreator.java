@@ -53,7 +53,7 @@ public abstract class TypeCreator<R> {
         return !isComplex();
     }
 
-    protected abstract R create();
+    public abstract R create();
 
     public static <T> Optional<T> buildFrom(TypeDeclaration typeDeclaration) {
         TypeCreator<T> typeCreator = typeCreatorFactory.creator(typeDeclaration);

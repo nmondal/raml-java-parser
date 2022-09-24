@@ -10,7 +10,7 @@ public class BooleanCreator extends TypeCreator<Boolean> {
     }
 
     @Override
-    protected Boolean create() {
+    public Boolean create() {
         return random.nextBoolean();
     }
 }

@@ -1,6 +1,8 @@
 package org.raml.v2.creators;
 
 import org.raml.v2.api.model.v10.datamodel.ArrayTypeDeclaration;
+import org.raml.v2.api.model.v10.datamodel.ObjectTypeDeclaration;
+import org.raml.v2.api.model.v10.datamodel.UnionTypeDeclaration;
 import org.raml.v2.creators.impl.*;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 import org.slf4j.Logger;
@@ -45,6 +47,9 @@ public interface TypeCreatorFactory {
             Function<TypeDeclaration, TypeCreator> constructor = constructors.get( tdName );
             if ( constructor != null ) return constructor;
             if ( typeDeclaration instanceof ArrayTypeDeclaration) return ArrayCreator::new;
+            if ( typeDeclaration instanceof ObjectTypeDeclaration) return CompositeCreator::new;
+            if ( typeDeclaration instanceof UnionTypeDeclaration) return UnionCreator::new;
+
             return null;
         }
 

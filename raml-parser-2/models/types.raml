@@ -11,6 +11,12 @@ types:
   RelationHuman:
     type: boolean
 
+  Email:
+    type: string
+    pattern: "[a-z]+@[a-z]+\\.com"
+    minLength: 15
+    maxLength: 32
+
   AgeHuman:
     type : integer
     minimum: 18
@@ -47,7 +53,6 @@ types:
     minimum: 0.0001
     maximum: 1.000
 
-
   BirthDay:
     type : date-only
 
@@ -70,6 +75,8 @@ types:
     minItems: 5
     maxItems: 5
 
+  Contact:
+    type : Phone | Email
 
   Person:
     type: object

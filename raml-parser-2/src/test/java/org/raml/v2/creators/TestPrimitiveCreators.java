@@ -10,8 +10,13 @@ public final class TestPrimitiveCreators extends CreatorTestBase{
     public void testString(){
         Optional<String> ph = TypeCreator.buildFrom(api, "Phone");
         Assert.assertTrue(ph.isPresent());
-        String result = ph.get();
-        Assert.assertFalse(result.isEmpty());
+        Assert.assertFalse(ph.get().isEmpty());
+
+        Optional<String> email = TypeCreator.buildFrom(api, "Email");
+        Assert.assertTrue(email.isPresent());
+        Assert.assertTrue(email.get().length() <= 32 );
+        Assert.assertTrue(email.get().length() >= 15 );
+
     }
 
     @Test

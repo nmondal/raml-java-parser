@@ -7,9 +7,8 @@ import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-public class StringCreator extends TypeCreator {
+public class StringCreator extends TypeCreator<String> {
     public final int min;
     public final int max;
     public final String pat;
@@ -39,7 +38,7 @@ public class StringCreator extends TypeCreator {
     }
 
     @Override
-    protected Optional<Object> create() {
+    protected String create() {
         final String res;
         // if enum, then sample:
         if ( isEnum() ){
@@ -48,6 +47,6 @@ public class StringCreator extends TypeCreator {
         } else {
             res = generex.random(min,max);
         }
-        return Optional.of(res);
+        return res;
     }
 }

@@ -22,7 +22,8 @@ public class Main {
             }
         } else {
             Api api = ramlModelResult.getApiV10();
-            Optional<Object> ph = TypeCreator.buildFrom(api, "Phone");
+            Optional<String> ph = TypeCreator.buildFrom(api, "Phone");
+            System.out.println(ph.get());
         }
     }
 }

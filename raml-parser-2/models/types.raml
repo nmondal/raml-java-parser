@@ -15,7 +15,7 @@ types:
       title?: string
   Phone:
     type: string
-    pattern: "[0-9|-]+"
+    pattern: "(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}"
   Manager:
     type: Person
     properties:

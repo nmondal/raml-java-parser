@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Supplier;
 
-public abstract class TypeCreator {
+public abstract class TypeCreator<R> {
     protected static final Map<TypeDeclaration, TypeCreator> creators = new HashMap<>();
 
     public static TypeCreatorFactory typeCreatorFactory = TypeCreatorFactory.DEFAULT_INSTANCE;
@@ -43,17 +43,17 @@ public abstract class TypeCreator {
         return !isComplex();
     }
 
-    protected abstract Object create();
+    protected abstract R create();
 
-    public static Optional<Object> buildFrom(TypeDeclaration typeDeclaration) {
-        TypeCreator typeCreator = typeCreatorFactory.creator(typeDeclaration);
+    public static <T> Optional<T> buildFrom(TypeDeclaration typeDeclaration) {
+        TypeCreator<T> typeCreator = typeCreatorFactory.creator(typeDeclaration);
         if (typeCreator.shouldBuild()) {
-            return Optional.of(typeCreator.create());
+            return Optional.of((T)typeCreator.create());
         }
         return Optional.empty();
     }
 
-    public static Optional<Object> buildFrom(Api api, String typeAliasName) {
+    public static <T> Optional<T> buildFrom(Api api, String typeAliasName) {
         List<TypeDeclaration> types = Objects.requireNonNull(api).types();
         for (TypeDeclaration td : types) {
             if ( td.name().equals(typeAliasName)){
@@ -62,5 +62,4 @@ public abstract class TypeCreator {
         }
         return Optional.empty();
     }
-
 }

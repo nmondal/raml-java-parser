@@ -1,6 +1,6 @@
 package org.raml.v2.creators;
 
-import org.raml.v2.creators.impl.StringCreator;
+import org.raml.v2.creators.impl.*;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +30,9 @@ public interface TypeCreatorFactory {
     TypeCreatorFactory DEFAULT_INSTANCE = new TypeCreatorFactory() {
         static {
             // register all...
+            registerClass("boolean", BooleanCreator::new);
+            registerClass("number", NumberCreator::new);
+            registerClass("integer", NumberCreator::new);
             registerClass("string", StringCreator::new);
         }
 

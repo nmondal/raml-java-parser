@@ -44,6 +44,11 @@ public class TestCreators {
     }
 
     @Test
+    public void testBoolean(){
+        Optional<Boolean>  rel = TypeCreator.buildFrom(api, "RelationHuman");
+        Assert.assertTrue(rel.isPresent());
+    }
+    @Test
     public void testInteger(){
         Optional<Byte>  age = TypeCreator.buildFrom(api, "AgeHuman");
         Assert.assertTrue(age.isPresent());

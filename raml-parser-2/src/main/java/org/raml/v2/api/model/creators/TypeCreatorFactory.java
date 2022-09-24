@@ -12,7 +12,7 @@ public interface TypeCreatorFactory {
 
     Map<TypeDeclaration, TypeCreator> creators = new HashMap<>();
 
-    Map<Class<TypeDeclaration>, Function<TypeDeclaration, TypeCreator>> constructors = new HashMap<>();
+    Map<String, Function<TypeDeclaration, TypeCreator>> constructors = new HashMap<>();
 
     TypeCreator creator(TypeDeclaration typeDeclaration);
 
@@ -20,20 +20,20 @@ public interface TypeCreatorFactory {
         creators.put(declaration,creator);
     }
 
-    static void registerClass(Class clazz, Function<TypeDeclaration, TypeCreator> constructor){
-        constructors.put(clazz,constructor);
+    static void registerClass(String typeName, Function<TypeDeclaration, TypeCreator> constructor){
+        constructors.put(typeName,constructor);
     }
 
     TypeCreatorFactory DEFAULT_INSTANCE = new TypeCreatorFactory() {
         static {
             // register all...
-            registerClass(StringTypeDeclaration.class, StringCreator::new);
+            registerClass("string", StringCreator::new);
         }
 
         @Override
         public TypeCreator creator(TypeDeclaration typeDeclaration) {
             if ( creators.containsKey(typeDeclaration)) return creators.get(typeDeclaration);
-            Function<TypeDeclaration, TypeCreator> constructor = constructors.get( typeDeclaration.getClass());
+            Function<TypeDeclaration, TypeCreator> constructor = constructors.get( typeDeclaration.type());
             if ( constructor == null ) {
                 return null;
             }

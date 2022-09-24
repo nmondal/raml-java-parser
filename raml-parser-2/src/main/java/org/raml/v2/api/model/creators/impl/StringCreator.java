@@ -48,6 +48,6 @@ public class StringCreator extends TypeCreator {
         } else {
             res = generex.random(min,max);
         }
-        return Optional.empty();
+        return Optional.of(res);
     }
 }

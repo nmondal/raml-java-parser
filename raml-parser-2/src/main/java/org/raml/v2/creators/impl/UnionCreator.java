@@ -29,6 +29,6 @@ public class UnionCreator extends TypeCreator {
         } else {
             inx = random.nextInt(propCreators.size());
         }
-        return propCreators.get(0).create();
+        return propCreators.get(inx).create();
     }
 }

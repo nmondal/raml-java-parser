@@ -76,7 +76,7 @@ public abstract class TypeCreator<R> {
                 return buildFrom(td);
             }
         }
-        logger.error( String.format("No Creator is found for [%s] - returning empty monad!", typeAliasName));
+        logger.error( String.format("No Top Level Type Name [%s] is found - returning empty monad!", typeAliasName));
         return Optional.empty();
     }
 }

@@ -76,4 +76,29 @@ public final class TestPrimitiveCreators extends CreatorTestBase{
         Assert.assertTrue(dt.isPresent());
         Assert.assertEquals( 23, dt.get().length());
     }
+
+    @Test
+    public void testEnums(){
+        int cnt = 0;
+        for ( int i =0; i < 10; i++ ) {
+            Optional<String> cl = TypeCreator.buildFrom(api, "ClearanceLevel");
+            Assert.assertTrue(cl.isPresent());
+            Assert.assertFalse(cl.get().isEmpty());
+            if ( cl.get().equals("high") ){
+                cnt++;
+            }
+        }
+        Assert.assertNotEquals(10, cnt);
+        Assert.assertNotEquals(0, cnt);
+        cnt = 0;
+        for ( int i =0; i < 10; i++ ) {
+            Optional<Integer> cl = TypeCreator.buildFrom(api, "Directions");
+            Assert.assertTrue(cl.isPresent());
+            if ( cl.get() == 0 ){
+                cnt++;
+            }
+        }
+        Assert.assertNotEquals(10, cnt);
+        Assert.assertNotEquals(0, cnt);
+    }
 }

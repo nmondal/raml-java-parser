@@ -62,6 +62,13 @@ types:
   BirthDateTime:
     type: datetime-only
 
+  ClearanceLevel:
+    enum : [ low, high ]
+
+  Directions:
+    type: integer
+    enum : [0,1]
+
   SampledAges:
     type: AgeHuman[]
     minItems: 1

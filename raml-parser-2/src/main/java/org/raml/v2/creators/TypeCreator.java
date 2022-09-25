@@ -8,15 +8,15 @@ import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public abstract class TypeCreator<R> {
-
     final static Logger logger = LoggerFactory.getLogger(TypeCreator.class);
+    static final Map<String, TypeDeclaration> allTypes = new HashMap<>();
+    static final Map<Api, Set<TypeDeclaration>> api2Types = new HashMap<>();
 
     protected static final Map<TypeDeclaration, TypeCreator> creators = new HashMap<>();
-
     public static TypeCreatorFactory typeCreatorFactory = TypeCreatorFactory.DEFAULT_INSTANCE;
-
     public final Random random = new SecureRandom();
 
     public final TypeDeclaration declaration;
@@ -70,11 +70,18 @@ public abstract class TypeCreator<R> {
     }
 
     public static <T> Optional<T> buildFrom(Api api, String typeAliasName) {
-        List<TypeDeclaration> types = Objects.requireNonNull(api).types();
-        for (TypeDeclaration td : types) {
-            if ( td.name().equals(typeAliasName)){
-                return buildFrom(td);
-            }
+        final Set<TypeDeclaration> types ;
+        if ( api2Types.containsKey(api) ){
+            types = api2Types.get(api);
+        } else {
+            types = Objects.requireNonNull(api).types()
+                    .stream()
+                    .peek((td) -> allTypes.put(td.name(), td)).collect(Collectors.toUnmodifiableSet());
+            api2Types.put(api,types);
+        }
+        TypeDeclaration td = allTypes.get(typeAliasName);
+        if ( td != null ){
+            return buildFrom(td);
         }
         logger.error( String.format("No Top Level Type Name [%s] is found - returning empty monad!", typeAliasName));
         return Optional.empty();

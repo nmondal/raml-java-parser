@@ -9,13 +9,19 @@ import java.util.Optional;
 
 public class TestCompositeCreator extends CreatorTestBase{
 
+    public static Map<String,Object> composite( String alias){
+        Optional<Map<String,Object>> obj = TypeCreator.buildFrom(api, alias);
+        Assert.assertTrue(obj.isPresent());
+        Map<String,Object> map = obj.get();
+        Assert.assertFalse(map.isEmpty());
+        return map;
+    }
+
     @Test
     public void testAllPrimitive(){
         int count = 0;
         for ( int i =0; i < 10; i++ ){
-            Optional<Map<String,Object>> person = TypeCreator.buildFrom(api, "Person");
-            Assert.assertTrue(person.isPresent());
-            Map<String,Object> map = person.get();
+            Map<String,Object> map = composite("Person");
             Assert.assertNotNull( map.get("firstname"));
             Assert.assertNotNull( map.get("lastname"));
             if ( map.containsKey("title") ){
@@ -27,10 +33,35 @@ public class TestCompositeCreator extends CreatorTestBase{
     }
 
     @Test
-    public void testParentWithArrayProperty(){
-        Optional<Map<String,Object>> mgr = TypeCreator.buildFrom(api, "Manager");
-        Assert.assertTrue(mgr.isPresent());
-        Map<String,Object> map = mgr.get();
-        Assert.assertFalse(map.isEmpty());
+    public void testParentWithProperties(){
+
+        Map<String,Object> map = composite("Manager");
+        // is person??
+        Assert.assertNotNull( map.get("firstname"));
+        Assert.assertNotNull( map.get("lastname"));
+        // has reports?
+        List<Map> reports = (List<Map>)map.get("reports");
+        Assert.assertNotNull(reports);
+        // are reports persons?
+        reports.forEach( (p) -> {
+            Assert.assertNotNull( p.get("firstname"));
+            Assert.assertNotNull( p.get("lastname"));
+        });
+        // now Admin
+        map = composite("Admin");
+        // is person??
+        Assert.assertNotNull( map.get("firstname"));
+        Assert.assertNotNull( map.get("lastname"));
+        // has clearance ?
+        Assert.assertNotNull( map.get("clearanceLevel"));
+
+        // Now one with referenced property
+        map = composite("AlertableAdmin");
+        // is admin?
+        Assert.assertNotNull( map.get("firstname"));
+        Assert.assertNotNull( map.get("lastname"));
+        Assert.assertNotNull( map.get("clearanceLevel"));
+        // has phone?
+        Assert.assertNotNull( map.get("phone"));
     }
 }

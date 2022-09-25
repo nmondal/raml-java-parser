@@ -49,7 +49,11 @@ public interface TypeCreatorFactory {
             if ( typeDeclaration instanceof ArrayTypeDeclaration) return ArrayCreator::new;
             if ( typeDeclaration instanceof ObjectTypeDeclaration) return CompositeCreator::new;
             if ( typeDeclaration instanceof UnionTypeDeclaration) return UnionCreator::new;
-
+            // at this point figure out the reference type?
+            if ( TypeCreator.allTypes.containsKey(tdName ) ){
+                TypeDeclaration referenced = TypeCreator.allTypes.get(tdName);
+                return constructor(referenced);
+            }
             return null;
         }
 
@@ -57,17 +61,17 @@ public interface TypeCreatorFactory {
         public <R> TypeCreator<R> creator(TypeDeclaration typeDeclaration) {
             if ( creators.containsKey(typeDeclaration)) return creators.get(typeDeclaration);
             Function<TypeDeclaration, TypeCreator> constructor = constructor(typeDeclaration);
-            if ( constructor == null ) { // create a null creator
-                logger.error( String.format( "Type Alias [%s] has no associated Type Creator (assigning null creator)!",
-                        typeDeclaration.name()));
-                return new TypeCreator(typeDeclaration) {
-                    @Override
-                    public Object create() {
-                        return null;
-                    }
-                };
+            if ( constructor != null ){ // direct...
+                return constructor.apply(typeDeclaration);
             }
-            return constructor.apply(typeDeclaration);
+            logger.error( String.format( "Type Alias [%s] has no associated Type Creator (assigning null creator)!",
+                    typeDeclaration.name()));
+            return new TypeCreator(typeDeclaration) {
+                @Override
+                public Object create() {
+                    return null;
+                }
+            };
         }
     };
 }

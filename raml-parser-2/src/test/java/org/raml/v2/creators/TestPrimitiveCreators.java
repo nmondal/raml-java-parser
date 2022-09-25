@@ -101,4 +101,14 @@ public final class TestPrimitiveCreators extends CreatorTestBase{
         Assert.assertNotEquals(10, cnt);
         Assert.assertNotEquals(0, cnt);
     }
+
+    @Test
+    public void testRedirections(){
+        // 1st level
+        Optional<Boolean>  rel = TypeCreator.buildFrom(api, "R1");
+        Assert.assertTrue(rel.isPresent());
+        // 2nd level
+        rel = TypeCreator.buildFrom(api, "R2");
+        Assert.assertTrue(rel.isPresent());
+    }
 }

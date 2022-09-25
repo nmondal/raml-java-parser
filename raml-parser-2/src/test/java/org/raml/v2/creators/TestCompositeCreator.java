@@ -11,8 +11,18 @@ public class TestCompositeCreator extends CreatorTestBase{
 
     @Test
     public void testAllPrimitive(){
-        Optional<Map<String,Object>> person = TypeCreator.buildFrom(api, "Person");
-        Assert.assertTrue(person.isPresent());
-        Map<String,Object> map = person.get();
+        int count = 0;
+        for ( int i =0; i < 10; i++ ){
+            Optional<Map<String,Object>> person = TypeCreator.buildFrom(api, "Person");
+            Assert.assertTrue(person.isPresent());
+            Map<String,Object> map = person.get();
+            Assert.assertNotNull( map.get("firstname"));
+            Assert.assertNotNull( map.get("lastname"));
+            if ( map.containsKey("title") ){
+                count ++;
+            }
+        }
+        Assert.assertNotEquals(0, count);
+        Assert.assertNotEquals(10, count);
     }
 }

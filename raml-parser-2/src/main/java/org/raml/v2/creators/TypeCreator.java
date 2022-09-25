@@ -19,7 +19,7 @@ public abstract class TypeCreator<R> {
 
     public final Random random = new SecureRandom();
 
-    protected final TypeDeclaration declaration;
+    public final TypeDeclaration declaration;
 
     @Override
     public String toString(){

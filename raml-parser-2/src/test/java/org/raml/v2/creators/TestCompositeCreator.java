@@ -25,4 +25,12 @@ public class TestCompositeCreator extends CreatorTestBase{
         Assert.assertNotEquals(0, count);
         Assert.assertNotEquals(10, count);
     }
+
+    @Test
+    public void testParentWithArrayProperty(){
+        Optional<Map<String,Object>> mgr = TypeCreator.buildFrom(api, "Manager");
+        Assert.assertTrue(mgr.isPresent());
+        Map<String,Object> map = mgr.get();
+        Assert.assertFalse(map.isEmpty());
+    }
 }

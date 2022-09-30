@@ -9,14 +9,6 @@ import java.util.Optional;
 
 public class TestCompositeCreator extends CreatorTestBase{
 
-    public static Map<String,Object> composite( String alias){
-        Optional<Map<String,Object>> obj = TypeCreator.buildFrom(api, alias);
-        Assert.assertTrue(obj.isPresent());
-        Map<String,Object> map = obj.get();
-        Assert.assertFalse(map.isEmpty());
-        return map;
-    }
-
     @Test
     public void testAllPrimitive(){
         int count = 0;

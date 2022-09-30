@@ -1,0 +1,42 @@
+#%RAML 1.0
+title: Type with Recursion
+mediaType: application/json
+types:
+
+  Person:
+    type: object
+    properties:
+      id : string
+      partner? : Person
+      ::depth:
+        type: integer
+        minimum: 1
+        maximum: 1
+
+      gender:
+        enum : [ "M", "F", "U", "T" ]
+
+  Node:
+    type: object
+    properties:
+      nodeId: integer
+      value : string
+
+      children :
+        type: Node[]
+        minItems: 0
+        maxItems: 2
+
+      ::depth:
+        type: integer
+        minimum: 1
+        maximum: 3
+
+
+/nodes/{nodeId}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Node

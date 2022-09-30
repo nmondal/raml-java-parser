@@ -14,8 +14,6 @@ public abstract class TypeCreator<R> {
     final static Logger logger = LoggerFactory.getLogger(TypeCreator.class);
     static final Map<String, TypeDeclaration> allTypes = new HashMap<>();
     static final Map<Api, Set<TypeDeclaration>> api2Types = new HashMap<>();
-
-    protected static final Map<TypeDeclaration, TypeCreator> creators = new HashMap<>();
     public static TypeCreatorFactory typeCreatorFactory = TypeCreatorFactory.DEFAULT_INSTANCE;
     public final Random random = new SecureRandom();
 
@@ -26,8 +24,13 @@ public abstract class TypeCreator<R> {
         return String.format("%s:%s:%s", declaration.name(), declaration.type(), getClass().getName());
     }
 
+    public boolean maxRecursionReached(){
+        return false;
+    }
+
     public TypeCreator(TypeDeclaration declaration) {
         this.declaration = declaration;
+        typeCreatorFactory.register(declaration,this);
     }
 
     public boolean shouldBuild() {

@@ -3,6 +3,8 @@ package org.raml.v2.creators.impl;
 import org.raml.v2.api.model.v10.datamodel.ArrayTypeDeclaration;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 import org.raml.v2.creators.TypeCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class ArrayCreator extends TypeCreator<List> {
+
+    static final Logger logger = LoggerFactory.getLogger(ArrayCreator.class);
 
     final int min;
     final int max;
@@ -41,6 +45,10 @@ public class ArrayCreator extends TypeCreator<List> {
         }
         List l = new ArrayList();
         for ( int i =0; i < size; i++ ){
+            if ( inner.maxRecursionReached() ){
+                logger.info("Max Recursion Depth Reached for Object Type : " + inner);
+                continue;
+            }
             Object val = inner.create();
             l.add(val);
         }

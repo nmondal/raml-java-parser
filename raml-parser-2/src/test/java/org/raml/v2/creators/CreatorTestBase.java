@@ -8,9 +8,11 @@ import org.raml.v2.api.model.common.ValidationResult;
 import org.raml.v2.api.model.v10.api.Api;
 
 import java.io.File;
+import java.util.Map;
+import java.util.Optional;
 
 public abstract class CreatorTestBase {
-    static Api api(String fileName){
+    public static Api api(String fileName){
         final File ramlFile = new File(fileName);
         Assert.assertTrue(ramlFile.exists());
         RamlModelResult ramlModelResult = new RamlModelBuilder().buildApi(ramlFile);
@@ -23,6 +25,14 @@ public abstract class CreatorTestBase {
         Api api = ramlModelResult.getApiV10();
         Assert.assertNotNull(api);
         return api;
+    }
+
+    public static Map<String,Object> composite(String alias){
+        Optional<Map<String,Object>> obj = TypeCreator.buildFrom(api, alias);
+        Assert.assertTrue(obj.isPresent());
+        Map<String,Object> map = obj.get();
+        Assert.assertFalse(map.isEmpty());
+        return map;
     }
 
     static Api api;

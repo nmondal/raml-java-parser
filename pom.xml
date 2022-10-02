@@ -24,7 +24,7 @@
         </developer>
     </developers>
 
-    <url>https://github.com/raml-org/raml-java-parser</url>
+    <url>https://github.com:nmondal/raml-java-parser.git</url>
 
     <licenses>
         <license>
@@ -124,7 +124,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.3.2</version>
+                    <version>3.0.0-M6</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -218,23 +218,19 @@
     </profiles>
 
     <scm>
-        <connection>scm:git:git://github.com:raml-org/raml-java-parser.git</connection>
-        <developerConnection>scm:git:git@github.com:raml-org/raml-java-parser.git</developerConnection>
-        <url>http://github.com/raml-org/raml-java-parser</url>
-        <tag>HEAD</tag>
+        <connection>scm:git:git://@github.com:nmondal/raml-java-parser.git</connection>
+        <developerConnection>scm:git:git@github.com:nmondal/raml-java-parser.git</developerConnection>
+        <url>http://github.com:nmondal/raml-java-parser.git</url>
+        <tag>master</tag>
     </scm>
-
     <distributionManagement>
         <repository>
-            <id>mulesoft-releases</id>
-            <name>MuleSoft Releases Repository</name>
-            <url>https://repository-master.mulesoft.org/releases/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>mulesoft-snapshots</id>
-            <name>MuleSoft Snapshots Repository</name>
-            <url>https://repository-master.mulesoft.org/snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
 </project>

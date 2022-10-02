@@ -244,12 +244,11 @@ This ensures `Type[]` is declared as array of Type.
 Email:
   type: string 
 Phone:
-	type: integer
-	minimum: 10000000
-	maximum: 99999999
-
+  type: integer
+  minimum: 10000000
+  maximum: 99999999
 Contact:
-    type: Email | Phone
+  type: Email | Phone
 ```
 
 #### Composites 
@@ -276,16 +275,15 @@ As one can see we can directly access a type or can refer a type.  We do support
 
 ```yaml
 Person:
-	type: object
-	properties:
-		id : string
-		partner? : Person
-		::depth:
-			type: integer
-			minimum: 1
-			maximum: 1
-		gender:
-			enum : [ "M", "F", "U", "T" ]
-
+  type: object
+  properties:
+    id : string
+    partner? : Person
+    ::depth:
+      type: integer
+      minimum: 1
+      maximum: 1
+    gender:
+      enum : [ "M", "F", "U", "T" ]
 ```
 

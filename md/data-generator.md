@@ -1,103 +1,96 @@
-# RAML Java Parser ( Part of Raml-Utils)
-This is a Java implementation of a [RAML](http://raml.org) parser for versions [1.0](http://raml.org/raml-10-spec) and [0.8](http://raml.org/raml-08-spec).
-The parser depends on SnakeYaml, a Java YAML parser.
+# RAML Data Generator
+## Motivation 
 
-See http://raml.org for more information about RAML.
+Test data generation is a problem that is ailing the industry for decades. Unfortunately, there has been no headway into it. Some solutions are trivial - maintaining a large class of data - a golden test data source such as to speak - and some are just generating random data that has little bearing with the practicalities of the real world. 
 
-As the original parser was deprecated - and with lots of security vulnerabilities I decided to maintain it. Should not be much. Moreover, it was crucial for my musings with data generation frameworks. Any data generation dreamworlds requires an abstract type system and after long inspection I found out `RAML` is better than that of `Open API`.
+There are some obvious good libraries, I found some of them because this is a problem I was trying to solve since last 10 years. My experience with high volume relational transactional monetary data made me realize that no test is better to test the system than a brute force approach of a large data attack onto the systems API. That I also worked in as the lead for system performances helped me formalising such things.
 
-As of now it is available as snapshot to maven repository.   
+A curated list can be found in here:
 
+1. Commercials ( products ) : https://www.guru99.com/test-data-generation-tools.html 
+2. Fakers : https://github.com/DiUS/java-faker 
+3. Mockeroo : https://www.mockaroo.com  
+4. Easy Random : https://github.com/j-easy/easy-random 
 
-## Maven
+The trouble with any of the existing system is a complete lack of type system in the data model. Types has their value, most notably in the help it provides while pressing the "." In case of object orientation is ascertained. In this case however, it defines the relationships between multiple types of data an enterprise will be using to run it's business. Unfortunately the trivial solutions provided does not work like that - it merely stores some very fixed structures like `email` or `state` which are essentially of limited applicability.
 
-```xml
-  <dependency>
-    <groupId>org.zoomba-lang</groupId>
-    <artifactId>raml-parser-2</artifactId>
-    <version>${raml-parser-version}</version>
-  </dependency>
-```
+Also it is impossible to construct types and share and reuse them - an idea that `Easy Random` brushes upon. 
 
-### Development version
+## Formalism 
 
-As of now this is the only version available which is security risk free - and in snapshot repository. I would possibly try to fix some bugs in the parser - but that is not the high priority. 
+Classically in CS this is a language generator - that is itself a grammar. Luckily for us, we have used the `RAML` type system itself - so the structure of an `object` so to speak is pretty understandable and can be recursively defined.
 
-## Build
+In short `RAML` type system produces the grammar required - and the data generator system generates objects based on the grammar.
 
-### JAR file without dependencies
+`Atom` of such a grammar is primitive type - restricted to `RAML` spec for now :
 
-```mvn clean package```
+1. Boolean 
+2. Numeric 
+   1. Integers
+   2. Floating 
+3. Date Time 
+   1. Only Date 
+   2. Only Time 
+   3. Date Time 
+4. String 
+5. Algebric Types 
+   1. Composites 
+      1. Objects 
+      2. Array 
+   2. Union 
 
-### JAR file with dependencies
-
-```mvn clean package -P jar-with-dependencies```
-
-**Run standalone validator**
-
-```java -jar raml-parser-2-{version}.jar raml-file ...```
-
-### Raml Java Parser JVM Arguments
-In order to provide more flexibility, users can set different system properties when parsing different RAML files. Here we list all the system properties you can use right now:
-
-Argument | Description | Default Value
--------- | ----------- | -------------
-```yagi.json_duplicate_keys_detection``` | Setting it to true will make the parser fail if any JSON example contains duplicated keys | ```true```
-```raml.json_schema.fail_on_warning``` | Setting it to true will make the parser fail if any example validated against a particular Json Schema throws a warning message | ```false```
-```yagi.date_only_four_digits_year_length_validation```|	If TRUE, years of more than 4 digits are considered invalid | ```true```
-```org.raml.date_only_four_digits_year_length_validation```|	Same as "yagi.date_only_four_digits_year_length_validation" (kept for backwards compatibility)| ```true```
-```org.raml.dates_rfc3339_validation```|	if TRUE, enables RFC3339 validation for "datetime" type| ```true```
-```org.raml.dates_rfc2616_validation```|	if TRUE, enables RFC2616 validation for "datetime" type| ```true```
-```raml.xml.expandExternalEntities```|	Controls Java's EXTERNAL_GENERAL_ENTITIES_FEATURE and EXTERNAL_PARAMETER_ENTITIES_FEATURE| ```false```
-```raml.xml.expandInternalEntities```|	Controls Java's DISALLOW_DOCTYPE_DECL_FEATURE| ```false```
-```org.raml.strict_booleans```|	If FALSE, the strings "true" and "false" are valid for boolean type	| ```false```
-```org.raml.fallback_datetime_to_datetime-only```|	if TRUE, value passed to a datetime type will fallback on the datetime-only type and validate accordingly| ```false```
-```org.raml.cast_strings_as_numbers```|	if TRUE, will attempt to cast strings as numbers and validate| ```false```
-```org.raml.nillable_types```|	if TRUE, makes all types equivalent to type: <code>type: type&#124; nil;</code> | ```false```
-```raml.verifyRaml```|Verify the RAML file for YAML reference abuses | `true`
-```raml.verifyReferenceCycle```|Specifically verify YAML reference cycles| `true`
-```raml.maxDepth```|Limit depth of YAML references | `2000`
-```raml.maxReferences```|Limit number of YAML references in expansions|`10000`
-```raml.parser.encoding```|	Defines the charset being used by the parser| ```UTF-8```
-
-The RAML parser's XML parsing components also respect Java XML entity properties.
+For now the distribution used is simple `Uniform` while other distributions provisions would be in place.
 
 ## Usage
 
-```java
-RamlModelResult ramlModelResult = new RamlModelBuilder().buildApi(input);
-if (ramlModelResult.hasErrors())
-{
-    for (ValidationResult validationResult : ramlModelResult.getValidationResults())
-    {
-        System.out.println(validationResult.getMessage());
-    }
-}
-else
-{
-    Api api = ramlModelResult.getApiV10();
+Only supported form is `RAML 1.0`. 
 
-}
+### Configuration 
+
+We need to start with a declaration of how a data type would look like, for example suppose we want a `Student` data type:
+
+```yaml
+#%RAML 1.0
+title: Demo Types Generation 
+mediaType: application/json
+types:
+
+  Student:
+    type: object
+    properties:
+      id : string
+      gender:
+        enum : [ "M", "F", "U", "T" ]
+      age: int8
+      subjects: Subject[]
+
+  Subject:
+    type: object
+    id : string
+    name : string
+
+/students/{studentId}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Student
+
 ```
 
-## Contribution guidelines
 
-### Contributor’s Agreement
 
-No worries, raise PR. 
+### Basic Code 
 
-### Pull requests are always welcome
+```java
+// get model result 
+RamlModelResult ramlModelResult = new RamlModelBuilder().buildApi(input);
+// get API
+Api api = ramlModelResult.getApiV10();
+// now generated named type
+Map<String,Object> stMap = TypeCreator.buildFrom(api, "Student");
+```
 
-I have decided that the code in open source is a terrible problem, so I would personally figure out if a PR is done in the right way.
+The reason for using `Map<>` is to ensure mot tightly getting bound to any structural implantation. Different JVM languages treats record classes in different ways across versions - so the final user may chose how to convert it to a strict hardened type. 
 
-### Create issues...
-
-Freely. No problem at all. Love to fix issues or would agree it is a troublesome one. I am only retired, not defunct. 
-
-### ...but check for existing issues first!
-
-Please take a moment to check that an issue doesn't already exist documenting your bug report or improvement proposal. If it does, it never hurts to thumb up the original post or add "I have this problem too". This will help prioritize the most common problems and requests.
-
-### Merge approval
-
-I will review your pull request and will merge into the main repo. Commits get approval based on the conventions outlined in the previous section. For example, new features without additional tests will be not approved.

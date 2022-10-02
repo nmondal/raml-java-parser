@@ -43,7 +43,7 @@ For now the distribution used is simple `Uniform` while other distributions prov
 
 ## Usage
 
-Only supported form is `RAML 1.0`. 
+Only supported form is `RAML 1.0`. For more overview about basal `RAML` data types - please see the [RAML 1.0 spec](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md#raml-data-types).
 
 ### Configuration 
 
@@ -93,4 +93,199 @@ Map<String,Object> stMap = TypeCreator.buildFrom(api, "Student");
 ```
 
 The reason for using `Map<>` is to ensure mot tightly getting bound to any structural implantation. Different JVM languages treats record classes in different ways across versions - so the final user may chose how to convert it to a strict hardened type. 
+
+## Manual 
+
+### Primitives 
+
+#### Boolean 
+
+```yaml
+SomeBoolean:
+    type: boolean
+```
+
+As of now the distribution used is `Uniform`. 
+
+#### String
+
+```yaml
+Phone:
+  type: string
+  pattern: "(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}" # note the use of regex 
+
+Email:
+    type: string
+    pattern: "[a-z]+@[a-z]+\\.com"
+    minLength: 15 # min no of chars 
+    maxLength: 32 # max no of chars 
+
+```
+
+
+
+#### Numerics
+
+##### Integers
+
+```yaml
+  AgeHuman:
+    type : integer
+    minimum: 18
+    maximum: 80
+    format: int8
+
+  AgeBuilding:
+    type : integer
+    minimum: 0
+    maximum: 20000
+    format: int16
+
+  AgeFossil:
+    type : integer # we could have used int32 too.
+    minimum: 0
+    maximum: 1000000
+    format: int32
+
+  AgeExistence:
+    type : integer
+    minimum: 0
+    maximum: 1000000000
+    format: int64
+
+```
+
+The default of Course is set to be `int32`. Now, here is a problem I do not like byte spec in a datatype, that is antithesis to a declarative paradigm - integer should be an integer - and can be arbitrary long. But the `RAML` was not created in the same spirit it was designed to create platform independent data types for transport. 
+
+##### Fractions
+
+```yaml
+FuzzyFloat:
+  type: number
+  format: float
+   minimum: 0.00
+   maximum: 1.00
+
+Fuzziness:
+  type: number
+  format: double
+  minimum: 0.0001
+  maximum: 1.000
+
+```
+
+Type `number` defaults into `double`. 
+
+#### Date & Time 
+
+```yaml
+BirthDay:
+  type : date-only
+
+LunchTime:
+  type: time-only
+
+BirthDateTime:
+   type: datetime-only
+```
+
+Now here `RAML` is a bit deficient - it does not specify the bounds of the fields, and thus  we have created the following  hack:
+
+```java
+DateTimeCreator.minDateTimeStamp = <put here> ; // set whatver 
+DateTimeCreator.maxDateTimeStamp = <put here> ; // set whatver
+```
+
+Once you put both limits, all date time would be within these two limits. Efforts are underway to fix it based on instances. 
+
+#### Enums
+
+##### Numerics 
+
+```yaml
+Directions:
+  type: integer
+  enum : [0,1,2,3]
+```
+
+Albeit coming as integer types - but picks one of the listed items. 
+
+##### Strings 
+
+```yaml
+Directions:
+  type: string
+  enum : ["North", "East", "West", "South"]
+```
+
+
+
+### Compositions
+
+#### Containers : Array
+
+```yaml
+Email:
+  type: string
+  pattern: "[a-z]+@[a-z]+\\.com"
+  minLength: 15
+  maxLength: 32
+Emails:
+  type: Email[]
+  minItems: 1
+  maxItems: 5
+```
+
+This ensures `Type[]` is declared as array of Type. 
+
+#### Union 
+
+```yaml
+Email:
+  type: string 
+Phone:
+	type: integer
+	minimum: 10000000
+	maximum: 99999999
+
+Contact:
+    type: Email | Phone
+```
+
+#### Composites 
+
+We started with `Student` object itself, let's try to explain it again here:
+
+```yaml
+Student:
+  type: object
+  properties:
+    id : string
+    gender:
+      enum : [ "M", "F", "U", "T" ]
+    age: int8
+    subjects: Subject[]
+
+Subject:
+  type: object
+  id : string
+  name : string
+```
+
+As one can see we can directly access a type or can refer a type.  We do support recursion. In that case, a specific extra property defines the `recursion` depth:
+
+```yaml
+Person:
+	type: object
+	properties:
+		id : string
+		partner? : Person
+		::depth:
+			type: integer
+			minimum: 1
+			maximum: 1
+		gender:
+			enum : [ "M", "F", "U", "T" ]
+
+```
 

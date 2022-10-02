@@ -1,24 +1,23 @@
-DEPRECATION NOTICE: please note that this parser is now deprecated, please use [webapi-parser](https://github.com/raml-org/webapi-parser) instead.
+# RAML Java Utils
 
-—-
+This has the following projects:
 
-# RAML Java Parser
-[![Gitter](https://badges.gitter.im/JoinChat.svg)](https://gitter.im/raml-org/raml-java-parser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.raml/raml-parser-2/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.raml/raml-parser-2)
-
-This is a Java implementation of a [RAML](http://raml.org) parser for versions [1.0](http://raml.org/raml-10-spec) and [0.8](http://raml.org/raml-08-spec).
-The parser depends on SnakeYaml, a Java YAML parser.
-
-The old version that only support RAML 0.8 is still available [here](https://github.com/raml-org/raml-java-parser/tree/0.8.x).
+1. A Java implementation of a [RAML](http://raml.org) parser for versions [1.0](http://raml.org/raml-10-spec) and [0.8](http://raml.org/raml-08-spec).
+   The parser depends on SnakeYaml, a Java YAML parser. Upto date with latest dependencies and 0 security vulnerabilities.
+2. A Synthetic data generator using RAML's pretty excellent type system.
 
 See http://raml.org for more information about RAML.
+
+As the original parser was deprecated - and with lots of security vulnerabilities I decided to maintain it. Should not be much. Moreover, it was crucial for my musings with data generation frameworks. Any data generation dreamworlds requires an abstract type system and after long inspection I found out `RAML` is better than that of `Open API`.
+
+As of now it is available as snapshot to maven repository.   
 
 
 ## Maven
 
 ```xml
   <dependency>
-    <groupId>org.raml</groupId>
+    <groupId>org.zoomba-lang</groupId>
     <artifactId>raml-parser-2</artifactId>
     <version>${raml-parser-version}</version>
   </dependency>
@@ -26,7 +25,7 @@ See http://raml.org for more information about RAML.
 
 ### Development version
 
-SNAPSHOT versions are NOT synchronized to Central. If you want to use a snapshot version you need to add the https://repository.mulesoft.org/nexus/content/repositories/snapshots/ repository to your pom.xml.
+As of now this is the only version available which is security risk free - and in snapshot repository. I would possibly try to fix some bugs in the parser - but that is not the high priority. 
 
 ## Build
 
@@ -38,69 +37,26 @@ SNAPSHOT versions are NOT synchronized to Central. If you want to use a snapshot
 
 ```mvn clean package -P jar-with-dependencies```
 
-**Run standalone validator**
+## Usage 
 
-```java -jar raml-parser-2-{version}.jar raml-file ...```
+As of now the document has been split into two halves.
 
-### Raml Java Parser JVM Arguments
-In order to provide more flexibility, users can set different system properties when parsing different RAML files. Here we list all the system properties you can use right now:
-
-Argument | Description | Default Value
--------- | ----------- | -------------
-```yagi.json_duplicate_keys_detection``` | Setting it to true will make the parser fail if any JSON example contains duplicated keys | ```true```
-```raml.json_schema.fail_on_warning``` | Setting it to true will make the parser fail if any example validated against a particular Json Schema throws a warning message | ```false```
-```yagi.date_only_four_digits_year_length_validation```|	If TRUE, years of more than 4 digits are considered invalid | ```true```
-```org.raml.date_only_four_digits_year_length_validation```|	Same as "yagi.date_only_four_digits_year_length_validation" (kept for backwards compatibility)| ```true```
-```org.raml.dates_rfc3339_validation```|	if TRUE, enables RFC3339 validation for "datetime" type| ```true```
-```org.raml.dates_rfc2616_validation```|	if TRUE, enables RFC2616 validation for "datetime" type| ```true```
-```raml.xml.expandExternalEntities```|	Controls Java's EXTERNAL_GENERAL_ENTITIES_FEATURE and EXTERNAL_PARAMETER_ENTITIES_FEATURE| ```false```
-```raml.xml.expandInternalEntities```|	Controls Java's DISALLOW_DOCTYPE_DECL_FEATURE| ```false```
-```org.raml.strict_booleans```|	If FALSE, the strings "true" and "false" are valid for boolean type	| ```false```
-```org.raml.fallback_datetime_to_datetime-only```|	if TRUE, value passed to a datetime type will fallback on the datetime-only type and validate accordingly| ```false```
-```org.raml.cast_strings_as_numbers```|	if TRUE, will attempt to cast strings as numbers and validate| ```false```
-```org.raml.nillable_types```|	if TRUE, makes all types equivalent to type: <code>type: type&#124; nil;</code> | ```false```
-```raml.verifyRaml```|Verify the RAML file for YAML reference abuses | `true`
-```raml.verifyReferenceCycle```|Specifically verify YAML reference cycles| `true`
-```raml.maxDepth```|Limit depth of YAML references | `2000`
-```raml.maxReferences```|Limit number of YAML references in expansions|`10000`
-```raml.parser.encoding```|	Defines the charset being used by the parser| ```UTF-8```
-
-The RAML parser's XML parsing components also respect Java XML entity properties.
- 
-## Usage
-
-```java
-RamlModelResult ramlModelResult = new RamlModelBuilder().buildApi(input);
-if (ramlModelResult.hasErrors())
-{
-    for (ValidationResult validationResult : ramlModelResult.getValidationResults())
-    {
-        System.out.println(validationResult.getMessage());
-    }
-}
-else
-{
-    Api api = ramlModelResult.getApiV10();
-
-}
-```
+1. RAML Parser proper - the document for use can be found in here : [Raml Parser](md/raml-parser-2.md)
+2. RAML Type based Synthetic Data Generator -  [DART](md/data-generator.md)
 
 ## Contribution guidelines
 
 ### Contributor’s Agreement
 
-To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
+No worries, raise PR. 
 
 ### Pull requests are always welcome
 
-We are always thrilled to receive pull requests, and do our best to process them as fast as possible. Not sure if that typo is worth a pull request? Do it! We will appreciate it.
-
-If your pull request is not accepted on the first try, don't be discouraged! If there's a problem with the implementation, hopefully you received feedback on what to improve.
+I have decided that the code in open source is a terrible problem, so I would personally figure out if a PR is done in the right way.
 
 ### Create issues...
 
-Any significant improvement should be documented as [a GitHub issue](https://github.com/raml-org/raml-java-parser/issues) before anybody
-starts working on it.
+Freely. No problem at all. Love to fix issues or would agree it is a troublesome one. I am only retired, not defunct. 
 
 ### ...but check for existing issues first!
 
@@ -108,4 +64,4 @@ Please take a moment to check that an issue doesn't already exist documenting yo
 
 ### Merge approval
 
-The maintainers will review your pull request and, if approved, will merge into the main repo. Commits get approval based on the conventions outlined in the previous section. For example, new features without additional tests will be not approved.
+I will review your pull request and will merge into the main repo. Commits get approval based on the conventions outlined in the previous section. For example, new features without additional tests will be not approved.
